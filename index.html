@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="fr">
 <head>
+<link rel="icon" href="media/favicon.png">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Miya Sushi Sfax</title>
@@ -16,7 +17,7 @@ a{color:inherit;text-decoration:none}
 .topbar{background:var(--acc);color:#fff;text-align:center;font:500 11px var(--sans);letter-spacing:.22em;text-transform:uppercase;padding:9px 16px}
 header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:18px clamp(18px,3vw,44px);background:rgba(18,17,16,.92);border-bottom:1px solid var(--line)}
 .logo{display:flex;align-items:center;gap:12px;font:500 15px var(--sans);letter-spacing:.42em}
-.logo i{background:var(--acc)!important;color:#fff!important;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(232,87,42,.14);color:var(--acc);font:500 15px var(--jp);font-style:normal;letter-spacing:0}
+.logo img{width:34px;height:34px;border-radius:50%;flex:none}.logo i{background:var(--acc)!important;color:#fff!important;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(232,87,42,.14);color:var(--acc);font:500 15px var(--jp);font-style:normal;letter-spacing:0}
 nav{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:38px;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--mut)}
 nav a{position:relative;padding:4px 0}nav a.on{color:var(--txt)}
 nav a.on:after{content:"";position:absolute;left:50%;bottom:-6px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--acc)}
@@ -105,7 +106,7 @@ body.open .veil{opacity:1;pointer-events:auto}body.open .drawer{transform:none}
 .hero video,.hero .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,17,16,.55),rgba(18,17,16,0) 30%,rgba(18,17,16,.15) 60%,var(--bg))}
 .hero-c{position:absolute;left:0;right:0;bottom:clamp(50px,9vh,100px);text-align:center;padding:0 18px}
-.hero-c .jp{font:400 15px var(--jp);letter-spacing:.5em;color:var(--acc)}
+.hero-c .jp{font:600 12px var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--acc)}
 .hero h2{font:700 clamp(44px,7vw,108px)/.98 var(--serif);text-transform:uppercase;letter-spacing:.01em;margin-top:14px}
 .hero h2 .ln{display:block;overflow:hidden;padding-bottom:.06em}.hero h2 .ln span{display:block}
 .hero p.s{font:500 12px var(--sans);letter-spacing:.32em;text-transform:uppercase;color:var(--mut);margin-top:18px}
@@ -153,14 +154,14 @@ header{transition:background .4s}
 
 @media(max-width:900px){.cats,.split,.restos{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-@media(max-width:420px){.logo{font-size:13px;letter-spacing:.18em;gap:9px;white-space:nowrap}.logo i{width:26px;height:26px}.cartbtn{white-space:nowrap;gap:7px;padding:7px 8px 7px 12px;font-size:12px}}
+@media(max-width:420px){.logo img{width:28px;height:28px}.logo{font-size:13px;letter-spacing:.18em;gap:9px;white-space:nowrap}.logo img{width:34px;height:34px;border-radius:50%;flex:none}.logo i{width:26px;height:26px}.cartbtn{white-space:nowrap;gap:7px;padding:7px 8px 7px 12px;font-size:12px}}
 </style>
 </head>
 <body>
 <canvas id="trail" aria-hidden="true"></canvas>
 <div class="topbar">🔥 Nouveau : le Sushi Burrito est arrivé · Livraison partout à Sfax</div>
 <header id="hd">
- <a class="logo" href="#" aria-label="Miya Sushi, accueil"><i>宮</i>MIYA SUSHI</a>
+ <a class="logo" href="#" aria-label="Miya Sushi, accueil"><img src="media/logo.png" alt="" width="34" height="34">MIYA SUSHI</a>
  <nav aria-label="Navigation"><a class="on" href="#top">Boxes</a><a href="#carte">La carte</a><a href="#best">Best sellers</a><a href="#restos">Nous trouver</a></nav>
  <button class="cartbtn" id="cartBtn" aria-label="Ouvrir la commande">Commande <b id="cCount">0</b><span id="cTot">0 DT</span></button>
 </header>
@@ -169,7 +170,7 @@ header{transition:background .4s}
  <video id="film" muted playsinline loop autoplay preload="auto" poster="media/hero.jpg" aria-label="Rolls flambés au chalumeau (vidéo d’illustration)"><source src="media/hero.mp4" type="video/mp4"></video>
  <div class="shade"></div>
  <div class="hero-c">
-  <p class="jp">宮寿司 · Sfax</p>
+  <p class="jp">Sfax · Livraison &amp; à emporter</p>
   <h2><span class="ln"><span>Le sushi fusion</span></span><span class="ln"><span>de Sfax.</span></span></h2>
   <p class="s">★ 5,0 sur Google · Boxes · Burgers · Burritos</p>
   <div class="ctas"><a class="add" href="#top">Voir la carte</a><a class="ghost" href="tel:+21628820982">Appeler 28 820 982</a></div>
@@ -242,12 +243,12 @@ const MI=[{"k": "x00", "n": "Crunchy Box Small · 12 pcs", "p": 30, "img": "my_c
 const X={"my_burrito": ["1 burrito", "Saumon, crevettes, légumes frais, riz, nori, sauces maison", "Poisson, crustacés, soja, sésame", "Doux", "Sauce buldog ou mayo japonaise"], "my_crunchy": ["12 pièces", "Cheese wave saumon, crevette et crabe · fromage blanc, fromage fondant", "Poisson, crustacés, lait, gluten", "Doux", "Sauce buldog"], "nigiri": ["12 pièces", "California classic, maki saumon, nigiri saumon, gunkan masago", "Poisson, lait, soja", "Doux", "Soja sucrée"], "crab": ["24 pièces", "Crunchy maki spicy saumon, california smoke cheese, fusion roll lava", "Poisson, crustacés, lait, gluten", "Relevé 🌶", "Sauce buldog"], "salmon": ["20 pièces", "Fusion rolls volcano surf, fire wave, avocado, perles, lava", "Poisson, crustacés, lait, gluten", "Relevé 🌶", "Yakitori"], "box": ["36 pièces", "Futomaki yugo et volcano, cheese wave ×4, maki saumon cheese, maki spicy crevette", "Poisson, crustacés, lait, gluten", "Mixte", "Buldog ou mayo japonaise"], "my_xl": ["76 pièces", "Fusion roll avocado et perles, california chicken et saumon spicy, futomakis, crunchy makis", "Poisson, crustacés, volaille, lait, gluten", "Mixte", "Trio de sauces"]};
 const D=[
  {k:'my_burrito',cat:'Nouveauté',n:'Sushi Burrito',ar:'',d:'Plus grand, plus gourmand : saumon, crevettes, légumes frais et sauces, roulé façon sushi.',p:0},
- {k:'my_crunchy',cat:'Crunchy Box',n:'My Crunchy Box',ar:'クランチー・ボックス',d:'12 pièces croustillantes : cheese wave saumon, cheese wave crevette et cheese wave crabe, fromage blanc et fromage fondant.',p:30},
- {k:'nigiri',cat:'Crue Box',n:'My Crue Box',ar:'生ボックス',d:'12 pièces de poisson cru : california classic, maki saumon, nigiri saumon et gunkan masago.',p:35},
- {k:'crab',cat:'Cuite Box',n:'My Cuite Box',ar:'加熱ボックス',d:'24 pièces cuites : crunchy maki spicy saumon, california smoke cheese et fusion roll lava.',p:55},
- {k:'salmon',cat:'Signature',n:'Signature Box',ar:'シグネチャー',d:'20 pièces signature : fusion rolls volcano surf, fire wave, avocado, perles et lava.',p:65},
- {k:'box',cat:'Crunchy Box',n:'Crunchy Box Large',ar:'クランチー・L',d:'36 pièces : futomaki yugo et volcano, cheese wave saumon, crevette, crabe et poulet, makis saumon cheese et spicy crevette.',p:75},
- {k:'my_xl',cat:'À partager',n:'Cuite Box XLarge',ar:'特大ボックス',d:'76 pièces pour une grande tablée : fusion rolls avocado et perles, california chicken et saumon spicy, futomakis et crunchy makis.',p:145}
+ {k:'my_crunchy',cat:'Crunchy Box',n:'My Crunchy Box',ar:'',d:'12 pièces croustillantes : cheese wave saumon, cheese wave crevette et cheese wave crabe, fromage blanc et fromage fondant.',p:30},
+ {k:'nigiri',cat:'Crue Box',n:'My Crue Box',ar:'',d:'12 pièces de poisson cru : california classic, maki saumon, nigiri saumon et gunkan masago.',p:35},
+ {k:'crab',cat:'Cuite Box',n:'My Cuite Box',ar:'',d:'24 pièces cuites : crunchy maki spicy saumon, california smoke cheese et fusion roll lava.',p:55},
+ {k:'salmon',cat:'Signature',n:'Signature Box',ar:'',d:'20 pièces signature : fusion rolls volcano surf, fire wave, avocado, perles et lava.',p:65},
+ {k:'box',cat:'Crunchy Box',n:'Crunchy Box Large',ar:'',d:'36 pièces : futomaki yugo et volcano, cheese wave saumon, crevette, crabe et poulet, makis saumon cheese et spicy crevette.',p:75},
+ {k:'my_xl',cat:'À partager',n:'Cuite Box XLarge',ar:'',d:'76 pièces pour une grande tablée : fusion rolls avocado et perles, california chicken et saumon spicy, futomakis et crunchy makis.',p:145}
 ];
 const $=s=>document.querySelector(s),stage=$('#stage'),list=$('#list'),dots=$('#dots');
 const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
