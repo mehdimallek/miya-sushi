@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Miya Sushi Sfax</title>
+<meta name="description" content="Démo : carte interactive et commande en ligne pour restaurant.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Noto+Serif+JP:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B0A0A;--bg2:#161414;--gold:#F4C64E;--line:rgba(244,236,226,.1);--txt:#F4ECE2;--mut:rgba(244,236,226,.55);--acc:#E3141B;--serif:"Oswald","Arial Narrow",sans-serif;--sans:"Inter",system-ui,sans-serif;--jp:"Noto Serif JP",serif}
+*{box-sizing:border-box;margin:0;padding:0}
+#trail{position:fixed;inset:0;z-index:70;pointer-events:none}.cardc .ph,.about{overflow:hidden;border-radius:18px}html,body{overflow-x:clip}body{background:var(--bg);color:var(--txt);font:400 15px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+.topbar{background:var(--acc);color:#fff;text-align:center;font:500 11px var(--sans);letter-spacing:.22em;text-transform:uppercase;padding:9px 16px}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:18px clamp(18px,3vw,44px);background:rgba(18,17,16,.92);border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:12px;font:500 15px var(--sans);letter-spacing:.42em}
+.logo i{background:var(--acc)!important;color:#fff!important;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(232,87,42,.14);color:var(--acc);font:500 15px var(--jp);font-style:normal;letter-spacing:0}
+nav{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:38px;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--mut)}
+nav a{position:relative;padding:4px 0}nav a.on{color:var(--txt)}
+nav a.on:after{content:"";position:absolute;left:50%;bottom:-6px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--acc)}
+nav a:hover{color:var(--txt)}
+.cartbtn{display:flex;align-items:center;gap:10px;padding:9px 10px 9px 16px;border:1px solid var(--line);border-radius:999px;font-size:13px;background:rgba(23,21,19,.7)}
+.cartbtn b{min-width:20px;height:20px;border-radius:50%;background:var(--acc);display:grid;place-items:center;font-size:11px;font-weight:600}
+.cartbtn span{color:var(--mut);font-variant-numeric:tabular-nums}
+.cartbtn.bump{animation:bump .5s}
+@keyframes bump{40%{transform:scale(1.08)}}
+main{position:relative;overflow-x:clip;height:calc(100svh - 110px);min-height:600px;display:grid;grid-template-columns:minmax(300px,30%) 1fr 260px;align-items:center;padding:20px clamp(18px,3vw,44px) 40px;gap:20px}
+.glow{position:absolute;left:50%;top:52%;width:80vmin;height:80vmin;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(227,20,27,.09),transparent 65%);pointer-events:none;transition:background .8s}
+.info{position:relative;z-index:2;max-width:400px}
+.count{display:flex;align-items:center;gap:12px;font:500 11px var(--sans);letter-spacing:.14em;color:var(--mut)}
+.count em{font-style:normal;color:var(--txt)}.count i{width:46px;height:1px;background:var(--line);position:relative;overflow:hidden}
+.count i:after{content:"";position:absolute;inset:0;background:var(--acc);transform-origin:left;transform:scaleX(var(--p,0));transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.cat{margin-top:34px;font:500 11px var(--sans);letter-spacing:.32em;color:var(--acc);text-transform:uppercase}
+h1{font:600 clamp(40px,4.6vw,70px)/1 var(--serif);margin-top:12px;letter-spacing:.01em;text-transform:uppercase}
+.ar,.jp2{display:none!important}.ar{font:400 18px var(--jp);color:var(--mut);margin-top:14px;letter-spacing:.12em}
+.desc{color:var(--mut);margin-top:22px;font-size:14.5px;max-width:360px}
+.buy{display:flex;align-items:center;gap:14px;margin-top:30px}.buy .price,.buy .add{white-space:nowrap}.buy .more{flex:none}
+.more{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);font:300 24px/1 var(--sans);display:grid;place-items:center;transition:border-color .3s,transform .3s}
+.more:hover{border-color:var(--acc);transform:rotate(90deg)}
+.sheet{position:fixed;left:50%;bottom:0;z-index:32;width:min(560px,100%);transform:translate(-50%,105%);background:var(--bg2);border:1px solid var(--line);border-bottom:0;border-radius:22px 22px 0 0;padding:26px 26px calc(26px + env(safe-area-inset-bottom));transition:transform .55s cubic-bezier(.2,.8,.2,1);max-height:86svh;overflow:auto}
+body.info .sheet{transform:translate(-50%,0)}body.info .veil{opacity:1;pointer-events:auto}
+.sheet .top{display:flex;gap:16px;align-items:center}.sheet .top img{width:84px;height:84px;border-radius:50%;object-fit:cover}
+.sheet h3{font:600 28px/1.05 var(--serif);text-transform:uppercase}.sheet .jp2{font:400 14px var(--jp);color:var(--mut);margin-top:4px}
+.sheet dl{display:grid;grid-template-columns:auto 1fr;gap:10px 18px;margin-top:22px;font-size:14px}.sheet dt{color:var(--mut)}
+.sheet .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.sheet .tags span{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.sheet .x{position:absolute;top:16px;right:18px;color:var(--mut);font-size:13px}
+.sheet .add{width:100%;margin-top:24px}
+.price{font:600 30px var(--serif);color:var(--gold);font-variant-numeric:tabular-nums}
+.add{background:var(--acc);color:#fff;font-weight:500;font-size:12px;letter-spacing:.18em;text-transform:uppercase;padding:14px 24px;border-radius:999px;transition:transform .2s,box-shadow .3s}
+.add:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(232,87,42,.35)}
+.add:active{transform:scale(.96)}
+.line>*{display:block}
+.stage{position:relative;touch-action:pan-y;height:min(74vh,640px);display:grid;place-items:center}
+.plate{position:absolute;width:min(78vh,48vw,720px);aspect-ratio:1}
+.plate img{width:100%;height:100%;object-fit:cover;display:block;-webkit-mask:radial-gradient(closest-side,#000 62%,transparent 100%);mask:radial-gradient(closest-side,#000 62%,transparent 100%)}
+.arw{position:absolute;top:50%;z-index:4;width:46px;height:46px;margin-top:-23px;border-radius:50%;border:1px solid var(--line);background:rgba(18,17,16,.55);font:300 28px/1 var(--sans);display:grid;place-items:center;padding-bottom:3px;transition:border-color .3s,background .3s}
+.arw:hover{border-color:var(--acc);background:var(--acc)}.arw.l{left:0}.arw.r{right:0}
+.swipe{display:none}
+@media(max-width:900px){
+ .arw{width:38px;height:38px;font-size:24px}.arw.l{left:0}.arw.r{right:0}
+ .buy{gap:10px}.buy .add{padding:13px 16px;letter-spacing:.1em;font-size:11px}.buy .price{font-size:24px}.more{width:42px;height:42px}
+ .swipe{display:flex;position:absolute;left:50%;bottom:4%;z-index:4;transform:translateX(-50%);align-items:center;gap:8px;white-space:nowrap;background:rgba(18,17,16,.75);border:1px solid var(--line);border-radius:999px;padding:8px 14px 8px 10px;font:500 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;pointer-events:none;transition:opacity .5s}
+ .swipe i{font-style:normal;display:inline-block;animation:sw 1.6s ease-in-out infinite}
+ .swipe.gone{opacity:0}
+}
+@keyframes sw{0%,100%{transform:translateX(-7px) rotate(-8deg)}50%{transform:translateX(7px) rotate(8deg)}}
+.list{position:relative;z-index:2;display:flex;flex-direction:column;gap:6px}
+.it{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:14px;text-align:left;border:1px solid transparent;transition:background .3s,border-color .3s,opacity .3s;opacity:.55}
+.it img{width:40px;height:40px;border-radius:50%;object-fit:cover;object-position:center;flex:none;transition:transform .4s}
+.it b{display:block;font:500 13.5px var(--sans)}.it small{color:var(--mut);font-size:12px}
+.it:hover{opacity:.9}.it.on{opacity:1;background:var(--bg2);border-color:var(--line)}.it.on img{box-shadow:0 0 0 2px var(--acc)}
+.hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:3}
+.hint button{width:6px;height:6px;border-radius:50%;background:var(--line);transition:width .4s,background .4s}
+.hint button.on{width:22px;border-radius:3px;background:var(--txt)}
+/* cart drawer */
+.veil{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:30;opacity:0;pointer-events:none;transition:opacity .4s}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(400px,100%);z-index:31;background:var(--bg2);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .55s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;padding:26px}
+body.open .veil{opacity:1;pointer-events:auto}body.open .drawer{transform:none}
+.drawer h2{font:600 30px var(--serif);text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+.drawer h2 button{font:400 13px var(--sans);color:var(--mut)}
+.rows{flex:1;overflow:auto;margin-top:20px}
+.row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.ph0{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:rgba(227,20,27,.12);color:var(--acc);font:500 16px var(--jp);font-style:normal;flex:none}.row img{width:48px;height:48px;border-radius:50%;object-fit:cover}.row div{flex:1}.row b{display:block;font-weight:500}.row small{color:var(--mut)}
+.qty{display:flex;align-items:center;gap:10px}.qty button{width:28px;height:28px;border-radius:50%;border:1px solid var(--line)}
+.empty{color:var(--mut);padding:30px 0}
+.tot{display:flex;justify-content:space-between;padding:18px 0;font:400 22px var(--serif)}
+.send{display:block;text-align:center;background:var(--acc);color:#fff;font-weight:600;padding:16px;border-radius:999px}
+.send[aria-disabled=true]{opacity:.4;pointer-events:none}
+.demo{font-size:11px;color:var(--mut);padding:24px clamp(18px,3vw,44px);border-top:1px solid var(--line)}
+@media(max-width:900px){
+ nav{display:none}
+ header{padding:14px 18px}.logo{font-size:17px;letter-spacing:.24em}.cartbtn{padding:7px 8px 7px 13px}
+ main{grid-template-columns:1fr;height:auto;min-height:0;padding:16px 18px 40px;gap:8px}
+ .stage{order:1;height:auto;aspect-ratio:1;width:min(88vw,420px);margin:0 auto}
+ .plate{width:100%}
+ .info{order:2;max-width:none}.cat{margin-top:18px}
+ .list{order:3;flex-direction:row;overflow-x:auto;gap:8px;margin:18px -18px 0;padding:0 18px;scrollbar-width:none}
+ .list::-webkit-scrollbar{display:none}
+ .it{flex:none}.it small{display:none}
+ .hint{display:none}
+}
+.hero{position:relative;height:calc(100svh - 34px);min-height:560px;overflow:hidden;margin-top:-71px}
+.hero video,.hero .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,17,16,.55),rgba(18,17,16,0) 30%,rgba(18,17,16,.15) 60%,var(--bg))}
+.hero-c{position:absolute;left:0;right:0;bottom:clamp(50px,9vh,100px);text-align:center;padding:0 18px}
+.hero-c .jp{font:400 15px var(--jp);letter-spacing:.5em;color:var(--acc)}
+.hero h2{font:700 clamp(44px,7vw,108px)/.98 var(--serif);text-transform:uppercase;letter-spacing:.01em;margin-top:14px}
+.hero h2 .ln{display:block;overflow:hidden;padding-bottom:.06em}.hero h2 .ln span{display:block}
+.hero p.s{font:500 12px var(--sans);letter-spacing:.32em;text-transform:uppercase;color:var(--mut);margin-top:18px}
+.hero .ctas{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+.hero .ghost{margin-top:0;background:rgba(18,17,16,.35)}
+.scroll{position:absolute;left:50%;bottom:18px;width:1px;height:34px;background:var(--line);overflow:hidden}
+.scroll:after{content:"";position:absolute;left:0;top:-34px;width:1px;height:34px;background:var(--txt);animation:sc 2s infinite}
+@keyframes sc{to{top:34px}}
+@media(max-width:760px){.hero .ghost{display:none}.hero{margin-top:-63px;height:calc(100svh - 30px)}.topbar{font-size:9.5px;letter-spacing:.14em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+header{transition:background .4s}
+.mtabs{position:sticky;top:70px;z-index:5;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:30px 0 10px;padding:10px 0;background:var(--bg)}
+.mtabs::-webkit-scrollbar{display:none}
+.mt{flex:none;border:1px solid var(--line);border-radius:999px;padding:9px 16px;font:500 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--mut);transition:all .3s}
+.mt.on{background:var(--txt);color:var(--bg);border-color:var(--txt)}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px 60px}
+.mcat{padding-top:30px;scroll-margin-top:140px}.mcat h3{font:600 30px var(--serif);text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.mi{display:grid;grid-template-columns:56px 1fr auto auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.mi img{width:56px;height:56px;border-radius:50%;object-fit:cover}.mi b{font-weight:500;display:block}.mi small{color:var(--mut);font-size:13px}.mi span{font:600 18px var(--serif);color:var(--gold);white-space:nowrap}
+.mi-add{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);font-size:18px;transition:all .25s}
+.mi-add:hover{background:var(--acc);border-color:var(--acc)}.mi-add.ok{background:var(--acc);border-color:var(--acc)}
+@media(max-width:900px){.mgrid{grid-template-columns:1fr}.mtabs{top:62px}}
+.sec{padding:clamp(70px,10vw,130px) clamp(18px,4vw,64px);border-top:1px solid var(--line)}
+.eyebrow{font:500 11px var(--sans);letter-spacing:.32em;text-transform:uppercase;color:var(--acc)}
+.h2{font:600 clamp(34px,4.2vw,60px)/1.02 var(--serif);text-transform:uppercase;letter-spacing:.01em;margin-top:12px;max-width:16ch}
+.lead{color:var(--mut);max-width:560px;margin-top:16px}
+.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px}
+.cardc{background:var(--bg2);border:1px solid var(--line);border-radius:18px;overflow:hidden;text-align:left;transition:border-color .3s}
+.cardc:hover{border-color:rgba(227,20,27,.5)}
+.cardc .ph{aspect-ratio:4/3;overflow:hidden}.cardc img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.cardc:hover img{transform:scale(1.04)}
+.cardc div.t{padding:20px 22px 24px}.cardc h3{font:600 26px var(--serif);text-transform:uppercase}.cardc p{color:var(--mut);font-size:14px;margin-top:8px}
+.ghost{display:inline-block;margin-top:30px;border:1px solid var(--line);padding:13px 22px;border-radius:999px;font:500 12px var(--sans);letter-spacing:.18em;text-transform:uppercase}
+.ghost:hover{border-color:var(--txt)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,90px);align-items:center}
+.plats{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.plats span{border:1px solid var(--line);padding:10px 18px;border-radius:999px;font:500 13px var(--sans);letter-spacing:.06em}
+.about img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:18px}
+.restos{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:44px}
+.resto{border:1px solid var(--line);border-radius:18px;padding:28px;background:var(--bg2)}
+.resto h3{font:600 28px var(--serif);text-transform:uppercase}.resto p{color:var(--mut);margin-top:8px;font-size:14px}
+.resto .row2{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.resto a{border:1px solid var(--line);padding:10px 16px;border-radius:999px;font-size:13px}.resto a:hover{border-color:var(--acc)}
+.hrs{display:grid;grid-template-columns:1fr auto;gap:10px 20px;margin-top:18px}.hrs dd{color:var(--gold);font-weight:600}.contact{text-align:center}.contact .h2{margin:12px auto 0}.contact .lead{margin:16px auto 0}
+.contact .add{display:inline-block;margin-top:30px}
+
+@media(max-width:900px){.cats,.split,.restos{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media(max-width:420px){.logo{font-size:13px;letter-spacing:.18em;gap:9px;white-space:nowrap}.logo i{width:26px;height:26px}.cartbtn{white-space:nowrap;gap:7px;padding:7px 8px 7px 12px;font-size:12px}}
+</style>
+</head>
+<body>
+<canvas id="trail" aria-hidden="true"></canvas>
+<div class="topbar">🔥 Nouveau : le Sushi Burrito est arrivé · Livraison partout à Sfax</div>
+<header id="hd">
+ <a class="logo" href="#" aria-label="Miya Sushi, accueil"><i>宮</i>MIYA SUSHI</a>
+ <nav aria-label="Navigation"><a class="on" href="#top">Boxes</a><a href="#carte">La carte</a><a href="#best">Best sellers</a><a href="#restos">Nous trouver</a></nav>
+ <button class="cartbtn" id="cartBtn" aria-label="Ouvrir la commande">Commande <b id="cCount">0</b><span id="cTot">0 DT</span></button>
+</header>
+<section class="hero" id="accueil" aria-label="Accueil">
+ <img class="poster" src="media/hero.jpg" alt="" fetchpriority="high">
+ <video id="film" muted playsinline loop autoplay preload="auto" poster="media/hero.jpg" aria-label="Rolls flambés au chalumeau (vidéo d’illustration)"><source src="media/hero.mp4" type="video/mp4"></video>
+ <div class="shade"></div>
+ <div class="hero-c">
+  <p class="jp">宮寿司 · Sfax</p>
+  <h2><span class="ln"><span>Le sushi fusion</span></span><span class="ln"><span>de Sfax.</span></span></h2>
+  <p class="s">★ 5,0 sur Google · Boxes · Burgers · Burritos</p>
+  <div class="ctas"><a class="add" href="#top">Voir la carte</a><a class="ghost" href="tel:+21628820982">Appeler 28 820 982</a></div>
+ </div>
+ <span class="scroll" aria-hidden="true"></span>
+</section>
+<main id="top">
+ <div class="glow" aria-hidden="true"></div>
+ <section class="info" aria-live="polite">
+  <div class="count"><em id="idx">01</em><i id="bar"></i><span id="tot">07</span></div>
+  <p class="cat" id="cat"></p>
+  <h1 id="name"></h1>
+  <p class="ar" id="ar"></p>
+  <p class="desc" id="desc"></p>
+  <div class="buy"><span class="price" id="price"></span><button class="add" id="add">Ajouter à la commande</button><button class="more" id="more" aria-label="Plus d’infos sur ce plat">+</button></div>
+ </section>
+ <div class="stage" id="stage"><button class="arw l" id="prev" aria-label="Plat précédent">‹</button><button class="arw r" id="next" aria-label="Plat suivant">›</button><div class="swipe" id="swipe" aria-hidden="true"><i>👆</i><span>Glissez pour voir les plats</span></div></div>
+ <div class="list" id="list" role="tablist" aria-label="Plats"></div>
+ <div class="hint" id="dots"></div>
+</main>
+<section class="sec" id="carte">
+ <p class="eyebrow">La carte</p>
+ <h2 class="h2">Boxes, burgers et nouveautés</h2>
+ <div class="mtabs" id="mtabs" role="navigation" aria-label="Catégories"><a class="mt" href="#c0">Crunchy Box</a><a class="mt" href="#c1">Cuite Box</a><a class="mt" href="#c2">Crue Box</a><a class="mt" href="#c3">Signature</a><a class="mt" href="#c4">Sushi Crispy Burger</a><a class="mt" href="#c5">Nouveautés</a></div>
+ <div class="mgrid"><div class="mcat" id="c0"><h3>Crunchy Box</h3><div class="mi"><img src="media/my_crunchy_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Small · 12 pcs</b><small>Cheese wave saumon, crevette, crabe</small></div><span>30 DT</span><button class="mi-add" data-k="x00" aria-label="Ajouter Small · 12 pcs">+</button></div><div class="mi"><img src="media/m10.webp" alt="" loading="lazy" width="56" height="56"><div><b>Medium · 20 pcs</b><small>Maki spicy crevette, maki saumon cheese, cheese wave crevette, saumon, poulet</small></div><span>44 DT</span><button class="mi-add" data-k="x01" aria-label="Ajouter Medium · 20 pcs">+</button></div><div class="mi"><img src="media/m01.webp" alt="" loading="lazy" width="56" height="56"><div><b>Large · 36 pcs</b><small>Futomaki yugo et volcano, cheese wave ×4, makis cheese et spicy</small></div><span>75 DT</span><button class="mi-add" data-k="x02" aria-label="Ajouter Large · 36 pcs">+</button></div></div><div class="mcat" id="c1"><h3>Cuite Box</h3><div class="mi"><img src="media/m12.webp" alt="" loading="lazy" width="56" height="56"><div><b>Small · 12 pcs</b><small>California ebi tempura, cheese wave crabe, maki saumon fumé cheese</small></div><span>28 DT</span><button class="mi-add" data-k="x10" aria-label="Ajouter Small · 12 pcs">+</button></div><div class="mi"><img src="media/m13.webp" alt="" loading="lazy" width="56" height="56"><div><b>Medium · 24 pcs</b><small>Crunchy maki spicy saumon, california smoke cheese, fusion roll lava</small></div><span>55 DT</span><button class="mi-add" data-k="x11" aria-label="Ajouter Medium · 24 pcs">+</button></div><div class="mi"><img src="media/m02.webp" alt="" loading="lazy" width="56" height="56"><div><b>Large · 48 pcs</b><small>Fusion roll tokyo, california ebi tempura et saumon spicy, cheese wave crabe…</small></div><span>90 DT</span><button class="mi-add" data-k="x12" aria-label="Ajouter Large · 48 pcs">+</button></div><div class="mi"><img src="media/my_xl_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>XLarge · 76 pcs</b><small>Fusion rolls avocado et perles, california chicken, futomakis, crunchy makis…</small></div><span>145 DT</span><button class="mi-add" data-k="x13" aria-label="Ajouter XLarge · 76 pcs">+</button></div></div><div class="mcat" id="c2"><h3>Crue Box</h3><div class="mi"><img src="media/m00.webp" alt="" loading="lazy" width="56" height="56"><div><b>Small · 12 pcs</b><small>California classic, maki saumon, nigiri saumon, gunkan masago</small></div><span>35 DT</span><button class="mi-add" data-k="x20" aria-label="Ajouter Small · 12 pcs">+</button></div><div class="mi"><img src="media/m20.webp" alt="" loading="lazy" width="56" height="56"><div><b>Medium · 24 pcs</b><small>California classic, fusion roll fire wave, maki saumon avocat</small></div><span>55 DT</span><button class="mi-add" data-k="x21" aria-label="Ajouter Medium · 24 pcs">+</button></div><div class="mi"><img src="media/m22.webp" alt="" loading="lazy" width="56" height="56"><div><b>Large · 37 pcs</b><small>California classic, fusion roll green salmon…</small></div><span>92 DT</span><button class="mi-add" data-k="x22" aria-label="Ajouter Large · 37 pcs">+</button></div></div><div class="mcat" id="c3"><h3>Signature</h3><div class="mi"><img src="media/m21.webp" alt="" loading="lazy" width="56" height="56"><div><b>Signature Box · 20 pcs</b><small>Volcano surf, fire wave, avocado, perles, lava</small></div><span>65 DT</span><button class="mi-add" data-k="x30" aria-label="Ajouter Signature Box · 20 pcs">+</button></div></div><div class="mcat" id="c4"><h3>Sushi Crispy Burger</h3><div class="mi"><img src="media/my_burger_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Chicken Burger</b><small>Poulet dynamite, avocat, concombre, fromage blanc et fondant</small></div><span>24 DT</span><button class="mi-add" data-k="x40" aria-label="Ajouter Chicken Burger">+</button></div><div class="mi"><img src="media/my_burger_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Crabe Burger</b><small>Crabe, avocat, concombre, fromage blanc et fondant</small></div><span>24 DT</span><button class="mi-add" data-k="x41" aria-label="Ajouter Crabe Burger">+</button></div><div class="mi"><img src="media/my_burger_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Shrimp Burger</b><small>Crevette, avocat, concombre, fromages</small></div><span>26 DT</span><button class="mi-add" data-k="x42" aria-label="Ajouter Shrimp Burger">+</button></div><div class="mi"><img src="media/my_burger_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Salmon Burger</b><small>Saumon, avocat, concombre, fromages</small></div><span>26 DT</span><button class="mi-add" data-k="x43" aria-label="Ajouter Salmon Burger">+</button></div><div class="mi"><img src="media/my_burger_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Crazy Burger</b><small>Crevette, saumon, crabe, avocat, concombre, fromages</small></div><span>28 DT</span><button class="mi-add" data-k="x44" aria-label="Ajouter Crazy Burger">+</button></div></div><div class="mcat" id="c5"><h3>Nouveautés</h3><div class="mi"><img src="media/my_burrito_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Sushi Burrito</b><small>Saumon, crevettes, légumes frais et sauces · prix en boutique</small></div><span>Nouveau</span><button class="mi-add" data-k="x50" aria-label="Ajouter Sushi Burrito">+</button></div><div class="mi"><img src="media/m41.webp" alt="" loading="lazy" width="56" height="56"><div><b>Menu enfant · 11 pcs</b><small>Maki crevette, maki poulet tempura, poulet panko</small></div><span>20 DT</span><button class="mi-add" data-k="x51" aria-label="Ajouter Menu enfant · 11 pcs">+</button></div><div class="mi"><img src="media/my_gyoza_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Gyoza</b><small>Saveurs japonaises, sauce pimentée douce</small></div><span>Nouveau</span><button class="mi-add" data-k="x52" aria-label="Ajouter Gyoza">+</button></div><div class="mi"><img src="media/my_takoyaki_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Takoyaki</b><small>Nouveau sur la carte</small></div><span>Nouveau</span><button class="mi-add" data-k="x53" aria-label="Ajouter Takoyaki">+</button></div></div></div>
+</section>
+<section class="sec" id="best">
+ <p class="eyebrow">Les préférés des clients</p>
+ <h2 class="h2">Ce qu’on vient chercher chez Miya</h2>
+ <div class="cats">
+  <a class="cardc" href="#c5"><div class="ph"><img src="media/my_burrito.webp" alt="Sushi burrito Miya" loading="lazy"></div><div class="t"><h3>Sushi Burrito</h3><p>La nouveauté qui fait parler : plus grand, plus gourmand, saumon, crevettes et légumes frais.</p></div></a>
+  <a class="cardc" href="#c4"><div class="ph"><img src="media/my_burger.webp" alt="Sushi crispy burger Miya" loading="lazy"></div><div class="t"><h3>Crispy Burgers</h3><p>Le sushi en version burger croustillant : poulet, crabe, crevette, saumon ou crazy.</p></div></a>
+  <a class="cardc" href="#c0"><div class="ph"><img src="media/my_crunchy.webp" alt="Rolls crunchy Miya" loading="lazy"></div><div class="t"><h3>Crunchy Box</h3><p>Les cheese waves au fromage fondant, de 12 à 36 pièces.</p></div></a>
+ </div>
+</section>
+<section class="sec">
+ <div class="split">
+  <div><p class="eyebrow">Livraison</p><h2 class="h2">Livré partout à Sfax</h2><p class="lead">Sur place, à emporter ou en livraison. Commandez sur WhatsApp en deux clics ou via Zigzag Delivery.</p>
+   <div class="plats"><span>WhatsApp</span><span>Zigzag Delivery</span><span>À emporter</span><span>Sur place</span></div></div>
+  <div class="about"><img src="media/my_boxes.webp" alt="Boxes Miya Sushi prêtes à livrer" loading="lazy"></div>
+ </div>
+</section>
+<section class="sec" id="restos">
+ <div class="split">
+  <div><p class="eyebrow">Nous trouver</p><h2 class="h2">Route de Sidi Abbès, km 2</h2><p class="lead">Sfax 3062 · <a href="tel:+21628820982" style="color:var(--gold)">28 820 982</a><br>★ 5,0 sur Google</p>
+   <div class="plats"><a class="ghost" style="margin-top:0" href="https://www.google.com/maps/dir/?api=1&destination=Miya+Sushi+Sfax" target="_blank" rel="noopener">Itinéraire</a><a class="ghost" style="margin-top:0" href="https://www.google.com/maps/search/?api=1&query=Miya+Sushi+Sfax" target="_blank" rel="noopener">Voir les avis Google</a></div></div>
+  <div class="resto"><img src="media/my_facade.webp" alt="La façade de Miya Sushi" loading="lazy" style="width:100%;border-radius:12px;margin-bottom:18px;aspect-ratio:16/10;object-fit:cover"><h3>Horaires</h3><dl class="hrs"><dt>Lundi – jeudi</dt><dd>12:00 – 22:30</dd><dt>Vendredi – samedi</dt><dd>12:00 – 23:00</dd><dt>Dimanche</dt><dd>12:00 – 22:30</dd></dl><p>Carte bancaire acceptée</p></div>
+ </div>
+</section>
+<section class="sec contact">
+ <p class="eyebrow">Commande</p>
+ <h2 class="h2">Une envie de sushi ?</h2>
+ <p class="lead">Commandez sur WhatsApp ou appelez-nous, on prépare tout à la minute.</p>
+ <a class="add" href="https://wa.me/21628820982" target="_blank" rel="noopener">Commander sur WhatsApp</a>
+</section>
+<p class="demo">Maquette proposée à Miya Sushi Sfax · Prix repris de la carte Instagram · Photos et vidéo d’illustration (Pexels, Unsplash), à remplacer par vos photos.</p>
+<div class="veil" id="veil"></div>
+<aside class="sheet" id="sheet" aria-label="Détails du plat"><button class="x" id="sx">Fermer ✕</button><div class="top"><img id="si" alt=""><div><h3 id="sn"></h3><p class="jp2" id="sj"></p></div></div><p class="desc" id="sd" style="max-width:none"></p><dl id="sdl"></dl><div class="tags" id="st"></div><button class="add" id="sa">Ajouter à la commande</button></aside>
+<aside class="drawer" aria-label="Votre commande">
+ <h2>Votre commande <button id="close">Fermer ✕</button></h2>
+ <div class="rows" id="rows"></div>
+ <div class="tot"><span>Total</span><span id="dTot">0 DT</span></div>
+ <a class="send" id="send" target="_blank" rel="noopener" aria-disabled="true">Commander sur WhatsApp</a>
+</aside>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+const MI=[{"k": "x00", "n": "Crunchy Box Small · 12 pcs", "p": 30, "img": "my_crunchy_t"}, {"k": "x01", "n": "Crunchy Box Medium · 20 pcs", "p": 44, "img": "m10"}, {"k": "x02", "n": "Crunchy Box Large · 36 pcs", "p": 75, "img": "m01"}, {"k": "x10", "n": "Cuite Box Small · 12 pcs", "p": 28, "img": "m12"}, {"k": "x11", "n": "Cuite Box Medium · 24 pcs", "p": 55, "img": "m13"}, {"k": "x12", "n": "Cuite Box Large · 48 pcs", "p": 90, "img": "m02"}, {"k": "x13", "n": "Cuite Box XLarge · 76 pcs", "p": 145, "img": "my_xl_t"}, {"k": "x20", "n": "Crue Box Small · 12 pcs", "p": 35, "img": "m00"}, {"k": "x21", "n": "Crue Box Medium · 24 pcs", "p": 55, "img": "m20"}, {"k": "x22", "n": "Crue Box Large · 37 pcs", "p": 92, "img": "m22"}, {"k": "x30", "n": "Signature Signature Box · 20 pcs", "p": 65, "img": "m21"}, {"k": "x40", "n": "Chicken Burger", "p": 24, "img": "my_burger_t"}, {"k": "x41", "n": "Crabe Burger", "p": 24, "img": "my_burger_t"}, {"k": "x42", "n": "Shrimp Burger", "p": 26, "img": "my_burger_t"}, {"k": "x43", "n": "Salmon Burger", "p": 26, "img": "my_burger_t"}, {"k": "x44", "n": "Crazy Burger", "p": 28, "img": "my_burger_t"}, {"k": "x50", "n": "Sushi Burrito", "p": 0, "img": "my_burrito_t"}, {"k": "x51", "n": "Menu enfant · 11 pcs", "p": 20, "img": "m41"}, {"k": "x52", "n": "Gyoza", "p": 0, "img": "my_gyoza_t"}, {"k": "x53", "n": "Takoyaki", "p": 0, "img": "my_takoyaki_t"}];
+const X={"my_burrito": ["1 burrito", "Saumon, crevettes, légumes frais, riz, nori, sauces maison", "Poisson, crustacés, soja, sésame", "Doux", "Sauce buldog ou mayo japonaise"], "my_crunchy": ["12 pièces", "Cheese wave saumon, crevette et crabe · fromage blanc, fromage fondant", "Poisson, crustacés, lait, gluten", "Doux", "Sauce buldog"], "nigiri": ["12 pièces", "California classic, maki saumon, nigiri saumon, gunkan masago", "Poisson, lait, soja", "Doux", "Soja sucrée"], "crab": ["24 pièces", "Crunchy maki spicy saumon, california smoke cheese, fusion roll lava", "Poisson, crustacés, lait, gluten", "Relevé 🌶", "Sauce buldog"], "salmon": ["20 pièces", "Fusion rolls volcano surf, fire wave, avocado, perles, lava", "Poisson, crustacés, lait, gluten", "Relevé 🌶", "Yakitori"], "box": ["36 pièces", "Futomaki yugo et volcano, cheese wave ×4, maki saumon cheese, maki spicy crevette", "Poisson, crustacés, lait, gluten", "Mixte", "Buldog ou mayo japonaise"], "my_xl": ["76 pièces", "Fusion roll avocado et perles, california chicken et saumon spicy, futomakis, crunchy makis", "Poisson, crustacés, volaille, lait, gluten", "Mixte", "Trio de sauces"]};
+const D=[
+ {k:'my_burrito',cat:'Nouveauté',n:'Sushi Burrito',ar:'',d:'Plus grand, plus gourmand : saumon, crevettes, légumes frais et sauces, roulé façon sushi.',p:0},
+ {k:'my_crunchy',cat:'Crunchy Box',n:'My Crunchy Box',ar:'クランチー・ボックス',d:'12 pièces croustillantes : cheese wave saumon, cheese wave crevette et cheese wave crabe, fromage blanc et fromage fondant.',p:30},
+ {k:'nigiri',cat:'Crue Box',n:'My Crue Box',ar:'生ボックス',d:'12 pièces de poisson cru : california classic, maki saumon, nigiri saumon et gunkan masago.',p:35},
+ {k:'crab',cat:'Cuite Box',n:'My Cuite Box',ar:'加熱ボックス',d:'24 pièces cuites : crunchy maki spicy saumon, california smoke cheese et fusion roll lava.',p:55},
+ {k:'salmon',cat:'Signature',n:'Signature Box',ar:'シグネチャー',d:'20 pièces signature : fusion rolls volcano surf, fire wave, avocado, perles et lava.',p:65},
+ {k:'box',cat:'Crunchy Box',n:'Crunchy Box Large',ar:'クランチー・L',d:'36 pièces : futomaki yugo et volcano, cheese wave saumon, crevette, crabe et poulet, makis saumon cheese et spicy crevette.',p:75},
+ {k:'my_xl',cat:'À partager',n:'Cuite Box XLarge',ar:'特大ボックス',d:'76 pièces pour une grande tablée : fusion rolls avocado et perles, california chicken et saumon spicy, futomakis et crunchy makis.',p:145}
+];
+const $=s=>document.querySelector(s),stage=$('#stage'),list=$('#list'),dots=$('#dots');
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+let cur=-1,busy=false,cart={};
+const pad=n=>String(n).padStart(2,'0');
+$('#tot').textContent=pad(D.length);
+D.forEach((d,i)=>{
+ const b=document.createElement('button');b.className='it';b.role='tab';b.innerHTML=`<img src="media/${d.k}.webp" alt=""><span><b>${d.n}</b><small>${d.p?d.p+' DT':'Nouveau'}</small></span>`;b.onclick=()=>go(i);list.appendChild(b);
+ const o=document.createElement('button');o.setAttribute('aria-label',d.n);o.onclick=()=>go(i);dots.appendChild(o);
+ new Image().src=`media/${d.k}.webp`;
+});
+function setInfo(d,i){
+ $('#idx').textContent=pad(i+1);$('#bar').style.setProperty('--p',(i+1)/D.length);
+ $('#cat').textContent=d.cat;$('#name').textContent=d.n;$('#ar').textContent=d.ar;$('#desc').textContent=d.d;$('#price').textContent=d.p?d.p+' DT':'Nouveau';
+ [...list.children].forEach((e,j)=>{e.classList.toggle('on',j===i);e.setAttribute('aria-selected',j===i)});
+ [...dots.children].forEach((e,j)=>e.classList.toggle('on',j===i));
+ if(innerWidth<900){const c=list.children[i];list.scrollTo({left:c.offsetLeft-list.clientWidth/2+c.clientWidth/2,behavior:'smooth'})}
+}
+let swiped=false;try{swiped=localStorage.getItem('miya-swiped')==='1'}catch(e){}
+const hideHint=()=>{if(swiped)return;swiped=true;$('#swipe').classList.add('gone');try{localStorage.setItem('miya-swiped','1')}catch(e){}};
+function go(i){
+ i=(i+D.length)%D.length;if(i===cur||busy)return;
+ const dir=i>cur?1:-1,d=D[i],old=stage.querySelector('.plate');
+ const p=document.createElement('div');p.className='plate';p.innerHTML=`<img src="media/${d.k}.webp" alt="${d.n}">`;stage.appendChild(p);
+ const first=cur<0;cur=i;
+ if(RM||!window.gsap){old&&old.remove();setInfo(d,i);return}
+ busy=true;
+ const tl=gsap.timeline({onComplete:()=>{busy=false;old&&old.remove()}});
+ if(old)tl.to(old,{xPercent:-70*dir,yPercent:-10,rotate:-80*dir,scale:.7,opacity:0,duration:.8,ease:'power3.inOut'},0);
+ tl.fromTo(p,{xPercent:first?0:80*dir,yPercent:first?20:10,rotate:first?-60:90*dir,scale:first?.6:.75,opacity:0},{xPercent:0,yPercent:0,rotate:0,scale:1,opacity:1,duration:first?1.4:1,ease:'expo.out'},first?0:.2);
+ const els='.cat,#name,.ar,.desc,.buy';
+ if(first){setInfo(d,i);tl.from(els,{y:30,opacity:0,stagger:.07,duration:1,ease:'expo.out'},.3);tl.from('#list',{opacity:0,x:20,duration:1,ease:'expo.out',clearProps:'all'},.5)}
+ else{tl.to(els,{y:-18*dir,opacity:0,stagger:.03,duration:.3,ease:'power2.in',onComplete:()=>setInfo(d,i)},0)
+   .fromTo(els,{y:22*dir,opacity:0},{y:0,opacity:1,stagger:.06,duration:.7,ease:'expo.out'},.42)}
+}
+go(0);
+if(swiped)$('#swipe').classList.add('gone');
+$('#prev').onclick=()=>{go(cur-1);hideHint()};$('#next').onclick=()=>{go(cur+1);hideHint()};
+// nudge the plate once when the menu comes into view, to hint it moves
+if(!RM&&window.gsap&&!swiped){const io3=new IntersectionObserver(es=>{if(es[0].isIntersecting){io3.disconnect();setTimeout(()=>{const p=stage.querySelector('.plate');if(p&&!busy)gsap.timeline().to(p,{xPercent:-9,rotate:-8,duration:.45,ease:'power2.out'}).to(p,{xPercent:0,rotate:0,duration:.9,ease:'elastic.out(1,.5)'})},600)}},{threshold:.6});io3.observe(stage)}
+addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(cur+1);if(e.key==='ArrowLeft')go(cur-1);if(e.key==='Escape')shut()});
+let sx=0,sy=0;stage.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+stage.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5){go(cur+(dx<0?1:-1));hideHint()}},{passive:true});
+// cart
+function render(){
+ const ks=Object.keys(cart);let n=0,t=0;const F=k=>D.find(x=>x.k===k)||MI.find(x=>x.k===k);
+ $('#rows').innerHTML=ks.length?ks.map(k=>{const d=F(k),q=cart[k];n+=q;t+=q*d.p;return `<div class="row"><img src="media/${(MI.find(x=>x.k===k)||{}).img||k}.webp" alt=""><div><b>${d.n}</b><small>${d.p?d.p+' DT':'Nouveau'}</small></div><div class="qty"><button data-k="${k}" data-d="-1" aria-label="Retirer">−</button>${q}<button data-k="${k}" data-d="1" aria-label="Ajouter">+</button></div></div>`}).join(''):'<p class="empty">Votre commande est vide.</p>';
+ $('#cCount').textContent=n;$('#cTot').textContent=t+' DT';$('#dTot').textContent=t+' DT';
+ const msg='Bonjour Miya Sushi, je souhaite commander :\n'+ks.map(k=>`${cart[k]} × ${F(k).n}`).join('\n')+`\nTotal : ${t} DT`;
+ const s=$('#send');s.href='https://wa.me/21628820982?text='+encodeURIComponent(msg);s.setAttribute('aria-disabled',!ks.length);
+}
+$('#rows').onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.k;cart[k]=(cart[k]||0)+ +b.dataset.d;if(cart[k]<=0)delete cart[k];render()};
+$('#add').onclick=()=>{const d=D[cur];cart[d.k]=(cart[d.k]||0)+1;render();const c=$('#cartBtn');c.classList.remove('bump');void c.offsetWidth;c.classList.add('bump');
+};
+const shut=()=>document.body.classList.remove('open','info');
+function info(){const d=D[cur],x=X[d.k];$('#si').src=`media/${d.k}.webp`;$('#sn').textContent=d.n;$('#sj').textContent=d.ar;$('#sd').textContent=d.d;
+ $('#sdl').innerHTML=`<dt>Portion</dt><dd>${x[0]}</dd><dt>Composition</dt><dd>${x[1]}</dd><dt>Allergènes</dt><dd>${x[2]}</dd><dt>Piquant</dt><dd>${x[3]}</dd><dt>Sauce conseillée</dt><dd>${x[4]}</dd>`;
+ $('#st').innerHTML=`<span>${d.cat}</span><span>${d.p?d.p+' DT':'Nouveau'}</span><span>Préparé à la minute</span>`;document.body.classList.add('info')}
+$('#more').onclick=info;
+document.querySelectorAll('.mi-add').forEach(b=>b.onclick=()=>{const k=b.dataset.k;cart[k]=(cart[k]||0)+1;render();b.classList.add('ok');b.textContent='✓';setTimeout(()=>{b.classList.remove('ok');b.textContent='+'},900);const c=$('#cartBtn');c.classList.remove('bump');void c.offsetWidth;c.classList.add('bump')});
+{const tabs=[...document.querySelectorAll('.mt')],box=$('#mtabs');const io2=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){tabs.forEach(a=>{const on=a.getAttribute('href')==='#'+x.target.id;a.classList.toggle('on',on);if(on)box.scrollTo({left:a.offsetLeft-box.clientWidth/2+a.clientWidth/2,behavior:'smooth'})})}}),{rootMargin:'-45% 0px -50% 0px'});document.querySelectorAll('.mcat').forEach(s=>io2.observe(s))}$('#sx').onclick=shut;$('#sa').onclick=()=>{$('#add').click();shut()};
+$('#cartBtn').onclick=()=>document.body.classList.add('open');$('#close').onclick=shut;$('#veil').onclick=shut;
+render();
+const film=document.getElementById('film');if(film&&!RM)setTimeout(()=>{if(film.paused||film.readyState<3){const im=document.createElement('img');im.className='poster';im.src='media/hero-anim.webp';im.alt='';film.replaceWith(im)}},2500);if(film){if(RM){film.remove()}else{const play=()=>film.play().catch(()=>{});play();film.addEventListener('pause',()=>{if(!document.hidden&&film.readyState>2)setTimeout(play,300)});document.addEventListener('visibilitychange',()=>{if(!document.hidden)play()});addEventListener('touchstart',play,{once:true,passive:true})}}
+const hd=document.getElementById('hd');const hb=()=>hd.style.background=scrollY>innerHeight*.6?'':'transparent';hb();addEventListener('scroll',hb,{passive:true});hd.style.borderBottomColor='transparent';
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{go(+b.dataset.go);scrollTo({top:0,behavior:'smooth'})});
+
+(function(){
+const $$=s=>[...document.querySelectorAll(s)];
+if(!window.gsap||!window.ScrollTrigger||RM){$$('.rv').forEach(e=>e.classList.add('in'));return}
+gsap.registerPlugin(ScrollTrigger);
+$$('.rv').forEach(e=>{e.classList.remove('rv')});
+let lenis;
+if(window.Lenis){lenis=new Lenis({lerp:.09,smoothWheel:true});lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);
+ $$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const h=a.getAttribute('href');const el=h==='#top'?document.body:document.querySelector(h);if(el){e.preventDefault();lenis.scrollTo(h==='#top'?0:el,{offset:/^#c\d/.test(h)?-150:-70,duration:1.4})}}));
+ document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{go(+b.dataset.go);lenis.scrollTo(0,{duration:1.4})});}
+// headings: words rise
+$$('.h2').forEach(h=>{h.innerHTML=h.textContent.split(' ').map(w=>`<span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em"><span class="w" style="display:inline-block">${w}</span></span>`).join(' ');
+ gsap.from(h.querySelectorAll('.w'),{yPercent:110,duration:1.1,ease:'expo.out',stagger:.06,scrollTrigger:{trigger:h,start:'top 88%',once:true}})});
+// fade-up
+$$('.eyebrow,.lead,.plats,.ghost,.contact .add,.resto,.cardc .t').forEach(el=>gsap.from(el,{y:40,opacity:0,duration:1.1,ease:'expo.out',scrollTrigger:{trigger:el,start:'top 92%',once:true}}));
+// images: clip reveal + parallax
+$$('.cardc .ph,.about').forEach(f=>{const img=f.querySelector('img');gsap.fromTo(f,{clipPath:'inset(18% 0% 18% 0% round 18px)'},{clipPath:'inset(0% 0% 0% 0% round 18px)',duration:1.4,ease:'expo.out',scrollTrigger:{trigger:f,start:'top 88%',once:true}});
+ if(img){gsap.set(img,{scale:1.14});gsap.fromTo(img,{yPercent:-6},{yPercent:6,ease:'none',scrollTrigger:{trigger:f,start:'top bottom',end:'bottom top',scrub:true}})}});
+
+// magnetic buttons + cursor trail (desktop)
+if(matchMedia('(hover:hover) and (pointer:fine)').matches){
+ $$('.add,.ghost,.cartbtn').forEach(b=>{const x=gsap.quickTo(b,'x',{duration:.5,ease:'elastic.out(1,.4)'}),y=gsap.quickTo(b,'y',{duration:.5,ease:'elastic.out(1,.4)'});b.addEventListener('pointermove',e=>{const r=b.getBoundingClientRect();x((e.clientX-r.left-r.width/2)*.25);y((e.clientY-r.top-r.height/2)*.3)});b.addEventListener('pointerleave',()=>{x(0);y(0)})});
+ const cv=document.getElementById('trail'),cx=cv.getContext('2d'),P=[];const sz=()=>{cv.width=innerWidth;cv.height=innerHeight};sz();addEventListener('resize',sz);
+ addEventListener('pointermove',e=>{P.push({x:e.clientX,y:e.clientY,a:1});if(P.length>40)P.shift()});
+ let dirty=false;gsap.ticker.add(()=>{if(!P.length){if(dirty){cx.clearRect(0,0,innerWidth,innerHeight);dirty=false}return}dirty=true;cx.clearRect(0,0,innerWidth,innerHeight);for(const p of P){p.a*=.9;cx.beginPath();cx.arc(p.x,p.y,2+6*p.a,0,7);cx.fillStyle=`rgba(227,20,27,${p.a*.5})`;cx.fill()}while(P.length&&P[0].a<.02)P.shift()});
+}
+gsap.from('.hero h2 .ln span',{yPercent:110,duration:1.3,ease:'expo.out',stagger:.12,delay:.2});
+gsap.from('.hero .jp,.hero p.s,.hero .ctas',{y:24,opacity:0,duration:1.1,ease:'expo.out',stagger:.1,delay:.5});
+if(innerWidth>760)gsap.fromTo('.hero video,.hero .poster',{scale:1.12},{scale:1,duration:2.4,ease:'power3.out'});
+gsap.to('.hero-c',{y:-80,opacity:0,ease:'none',immediateRender:false,scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom 30%',scrub:true}});
+addEventListener('load',()=>ScrollTrigger.refresh());
+})();
+</script>
+</body>
+</html>
