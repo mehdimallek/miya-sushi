@@ -315,6 +315,8 @@ let sx=0,sy=0;stage.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy
 stage.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5){go(cur+(dx<0?1:-1));hideHint()}},{passive:true});
 // cart
 let MODE='livraison',GEO='';
+// Mode test : ajouter ?wa=216XXXXXXXX à l'adresse pour recevoir les commandes sur un autre numéro
+const WA=((new URLSearchParams(location.search).get('wa')||'').replace(/\D/g,''))||'21628820982';
 // À remplir quand le restaurant donne ses tarifs (null = non affiché)
 const DELIVERY_FEE=null, MIN_ORDER=null;
 function render(){
@@ -323,7 +325,7 @@ function render(){
  $('#cCount').textContent=n;$('#cTot').textContent=t+' DT';$('#dTot').textContent=t+' DT';
  const liv=MODE==='livraison',v=id=>($(id).value||'').trim();
  const msg=`Bonjour Miya Sushi 👋\nNouvelle commande — ${liv?'🛵 LIVRAISON':'🥡 À EMPORTER'}\n\n`+ks.map(k=>`${cart[k]} × ${F(k).n}`).join('\n')+`\n\nTotal : ${t+(liv&&DELIVERY_FEE?DELIVERY_FEE:0)} DT${liv?(DELIVERY_FEE?` (dont ${DELIVERY_FEE} DT de livraison)`:' (hors frais de livraison)'):''}\n\nNom : ${v('#oNom')}\nTél : ${v('#oTel')}\n`+(liv?`Adresse : ${v('#oAdr')}`+(GEO?`\nPosition : ${GEO}`:''):`Retrait : ${v('#oHeure')||'dès que possible'}`)+(v('#oNote')?`\nRemarque : ${v('#oNote')}`:'');
- const s=$('#send');s.href='https://wa.me/21628820982?text='+encodeURIComponent(msg);s.setAttribute('aria-disabled',!ks.length);s.textContent=liv?'Commander en livraison sur WhatsApp':'Commander à emporter sur WhatsApp';
+ const s=$('#send');s.href='https://wa.me/'+WA+'?text='+encodeURIComponent(msg);s.setAttribute('aria-disabled',!ks.length);s.textContent=liv?'Commander en livraison sur WhatsApp':'Commander à emporter sur WhatsApp';
 }
 $('#rows').onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.k;cart[k]=(cart[k]||0)+ +b.dataset.d;if(cart[k]<=0)delete cart[k];render()};
 $('#add').onclick=()=>{const d=D[cur];cart[d.k]=(cart[d.k]||0)+1;render();const c=$('#cartBtn');c.classList.remove('bump');void c.offsetWidth;c.classList.add('bump');
