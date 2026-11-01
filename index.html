@@ -87,6 +87,14 @@ body.open .veil{opacity:1;pointer-events:auto}body.open .drawer{transform:none}
 .qty{display:flex;align-items:center;gap:10px}.qty button{width:28px;height:28px;border-radius:50%;border:1px solid var(--line)}
 .empty{color:var(--mut);padding:30px 0}
 .tot{display:flex;justify-content:space-between;padding:18px 0;font:400 22px var(--serif)}
+.ofm{display:grid;gap:8px;padding-top:14px;border-top:1px solid var(--line)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--bg);padding:4px;border-radius:999px;margin-bottom:4px}
+.seg button{padding:10px;border-radius:999px;font:600 13px var(--sans);color:var(--mut);transition:all .25s}
+.seg button.on{background:var(--acc);color:#fff}
+.ofm input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font:400 15px var(--sans);color:var(--txt)}
+.ofm input:focus{outline:none;border-color:var(--acc)}
+.ofm input.err{border-color:var(--acc);background:rgba(227,20,27,.08)}
+.drawer .rows{flex:1 1 auto;min-height:120px}
 .send{display:block;text-align:center;background:var(--acc);color:#fff;font-weight:600;padding:16px;border-radius:999px}
 .send[aria-disabled=true]{opacity:.4;pointer-events:none}
 .demo{font-size:11px;color:var(--mut);padding:24px clamp(18px,3vw,44px);border-top:1px solid var(--line)}
@@ -232,6 +240,14 @@ header{transition:background .4s}
 <aside class="drawer" aria-label="Votre commande">
  <h2>Votre commande <button id="close">Fermer ✕</button></h2>
  <div class="rows" id="rows"></div>
+ <div class="ofm" id="ofm">
+  <div class="seg" role="radiogroup" aria-label="Type de commande"><button type="button" class="on" data-m="livraison" role="radio" aria-checked="true">🛵 Livraison</button><button type="button" data-m="emporter" role="radio" aria-checked="false">🥡 À emporter</button></div>
+  <input id="oNom" placeholder="Votre nom" autocomplete="name">
+  <input id="oTel" placeholder="Téléphone" inputmode="tel" autocomplete="tel">
+  <input id="oAdr" class="liv" placeholder="Adresse de livraison (rue, quartier)" autocomplete="street-address">
+  <input id="oHeure" class="emp" placeholder="Heure de retrait (ex. 20h30)" hidden>
+  <input id="oNote" placeholder="Remarque (optionnel)">
+ </div>
  <div class="tot"><span>Total</span><span id="dTot">0 DT</span></div>
  <a class="send" id="send" target="_blank" rel="noopener" aria-disabled="true">Commander sur WhatsApp</a>
 </aside>
@@ -293,12 +309,14 @@ addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(cur+1);if(e.key==='Arr
 let sx=0,sy=0;stage.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
 stage.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5){go(cur+(dx<0?1:-1));hideHint()}},{passive:true});
 // cart
+let MODE='livraison';
 function render(){
  const ks=Object.keys(cart);let n=0,t=0;const F=k=>D.find(x=>x.k===k)||MI.find(x=>x.k===k);
  $('#rows').innerHTML=ks.length?ks.map(k=>{const d=F(k),q=cart[k];n+=q;t+=q*d.p;return `<div class="row"><img src="media/${(MI.find(x=>x.k===k)||{}).img||k}.webp" alt=""><div><b>${d.n}</b><small>${d.p?d.p+' DT':'Nouveau'}</small></div><div class="qty"><button data-k="${k}" data-d="-1" aria-label="Retirer">−</button>${q}<button data-k="${k}" data-d="1" aria-label="Ajouter">+</button></div></div>`}).join(''):'<p class="empty">Votre commande est vide.</p>';
  $('#cCount').textContent=n;$('#cTot').textContent=t+' DT';$('#dTot').textContent=t+' DT';
- const msg='Bonjour Miya Sushi, je souhaite commander :\n'+ks.map(k=>`${cart[k]} × ${F(k).n}`).join('\n')+`\nTotal : ${t} DT`;
- const s=$('#send');s.href='https://wa.me/21628820982?text='+encodeURIComponent(msg);s.setAttribute('aria-disabled',!ks.length);
+ const liv=MODE==='livraison',v=id=>($(id).value||'').trim();
+ const msg=`Bonjour Miya Sushi 👋\nNouvelle commande — ${liv?'🛵 LIVRAISON':'🥡 À EMPORTER'}\n\n`+ks.map(k=>`${cart[k]} × ${F(k).n}`).join('\n')+`\n\nTotal : ${t} DT${liv?' (hors frais de livraison)':''}\n\nNom : ${v('#oNom')}\nTél : ${v('#oTel')}\n`+(liv?`Adresse : ${v('#oAdr')}`:`Retrait : ${v('#oHeure')||'dès que possible'}`)+(v('#oNote')?`\nRemarque : ${v('#oNote')}`:'');
+ const s=$('#send');s.href='https://wa.me/21628820982?text='+encodeURIComponent(msg);s.setAttribute('aria-disabled',!ks.length);s.textContent=liv?'Commander en livraison sur WhatsApp':'Commander à emporter sur WhatsApp';
 }
 $('#rows').onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.k;cart[k]=(cart[k]||0)+ +b.dataset.d;if(cart[k]<=0)delete cart[k];render()};
 $('#add').onclick=()=>{const d=D[cur];cart[d.k]=(cart[d.k]||0)+1;render();const c=$('#cartBtn');c.classList.remove('bump');void c.offsetWidth;c.classList.add('bump');
@@ -312,6 +330,9 @@ document.querySelectorAll('.mi-add').forEach(b=>b.onclick=()=>{const k=b.dataset
 {const tabs=[...document.querySelectorAll('.mt')],box=$('#mtabs');const io2=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){tabs.forEach(a=>{const on=a.getAttribute('href')==='#'+x.target.id;a.classList.toggle('on',on);if(on)box.scrollTo({left:a.offsetLeft-box.clientWidth/2+a.clientWidth/2,behavior:'smooth'})})}}),{rootMargin:'-45% 0px -50% 0px'});document.querySelectorAll('.mcat').forEach(s=>io2.observe(s))}$('#sx').onclick=shut;$('#sa').onclick=()=>{$('#add').click();shut()};
 $('#cartBtn').onclick=()=>document.body.classList.add('open');$('#close').onclick=shut;$('#veil').onclick=shut;
 render();
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{MODE=b.dataset.m;document.querySelectorAll('.seg button').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-checked',x===b)});$('#oAdr').hidden=MODE!=='livraison';$('#oHeure').hidden=MODE==='livraison';render()});
+['#oNom','#oTel','#oAdr','#oHeure','#oNote'].forEach(id=>$(id).addEventListener('input',()=>{$(id).classList.remove('err');render()}));
+$('#send').addEventListener('click',e=>{const need=['#oNom','#oTel'].concat(MODE==='livraison'?['#oAdr']:[]);const miss=need.filter(id=>!$(id).value.trim());if(miss.length){e.preventDefault();miss.forEach(id=>$(id).classList.add('err'));$(miss[0]).focus()}});
 const film=document.getElementById('film');if(film&&!RM)setTimeout(()=>{if(film.paused||film.readyState<3){const im=document.createElement('img');im.className='poster';im.src='media/hero-anim.webp';im.alt='';film.replaceWith(im)}},2500);if(film){if(RM){film.remove()}else{const play=()=>film.play().catch(()=>{});play();film.addEventListener('pause',()=>{if(!document.hidden&&film.readyState>2)setTimeout(play,300)});document.addEventListener('visibilitychange',()=>{if(!document.hidden)play()});addEventListener('touchstart',play,{once:true,passive:true})}}
 const hd=document.getElementById('hd');const hb=()=>hd.style.background=scrollY>innerHeight*.6?'':'transparent';hb();addEventListener('scroll',hb,{passive:true});hd.style.borderBottomColor='transparent';
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{go(+b.dataset.go);scrollTo({top:0,behavior:'smooth'})});
