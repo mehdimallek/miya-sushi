@@ -250,7 +250,7 @@ header{transition:background .4s}
   <input id="oAdr" class="liv" placeholder="Adresse + point de repère (rue, km, quartier)" autocomplete="street-address">
   <button type="button" class="geo liv" id="oGeo">📍 Partager ma position (recommandé)</button>
   <p class="livinfo liv" id="livInfo">🛵 Livraison partout à Sfax · frais de livraison confirmés par le restaurant sur WhatsApp</p>
-  <input id="oHeure" class="emp" placeholder="Heure de retrait (ex. 20h30)" hidden>
+  <input id="oHeure" class="emp" placeholder="À quelle heure vous passez la récupérer ? (ex. 20h30)" hidden>
   <input id="oNote" placeholder="Remarque (optionnel)">
  </div>
  <div class="tot"><span>Total</span><span id="dTot">0 DT</span></div>
@@ -324,7 +324,7 @@ function render(){
  $('#rows').innerHTML=ks.length?ks.map(k=>{const d=F(k),q=cart[k];n+=q;t+=q*d.p;return `<div class="row"><img src="media/${(MI.find(x=>x.k===k)||{}).img||k}.webp" alt=""><div><b>${d.n}</b><small>${d.p?d.p+' DT':'Nouveau'}</small></div><div class="qty"><button data-k="${k}" data-d="-1" aria-label="Retirer">−</button>${q}<button data-k="${k}" data-d="1" aria-label="Ajouter">+</button></div></div>`}).join(''):'<p class="empty">Votre commande est vide.</p>';
  $('#cCount').textContent=n;$('#cTot').textContent=t+' DT';$('#dTot').textContent=t+' DT';
  const liv=MODE==='livraison',v=id=>($(id).value||'').trim();
- const msg=`Bonjour Miya Sushi 👋\nNouvelle commande — ${liv?'🛵 LIVRAISON':'🥡 À EMPORTER'}\n\n`+ks.map(k=>`${cart[k]} × ${F(k).n}`).join('\n')+`\n\nTotal : ${t+(liv&&DELIVERY_FEE?DELIVERY_FEE:0)} DT${liv?(DELIVERY_FEE?` (dont ${DELIVERY_FEE} DT de livraison)`:' (hors frais de livraison)'):''}\n\nNom : ${v('#oNom')}\nTél : ${v('#oTel')}\n`+(liv?`Adresse : ${v('#oAdr')}`+(GEO?`\nPosition : ${GEO}`:''):`Retrait : ${v('#oHeure')||'dès que possible'}`)+(v('#oNote')?`\nRemarque : ${v('#oNote')}`:'');
+ const msg=`Bonjour Miya Sushi 👋\nNouvelle commande — ${liv?'🛵 LIVRAISON':'🥡 À EMPORTER'}\n\n`+ks.map(k=>`${cart[k]} × ${F(k).n}`).join('\n')+`\n\nTotal : ${t+(liv&&DELIVERY_FEE?DELIVERY_FEE:0)} DT${liv?(DELIVERY_FEE?` (dont ${DELIVERY_FEE} DT de livraison)`:' (hors frais de livraison)'):''}\n\nNom : ${v('#oNom')}\nTél : ${v('#oTel')}\n`+(liv?`Adresse : ${v('#oAdr')}`+(GEO?`\nPosition : ${GEO}`:''):`Récupération : ${v('#oHeure')||'dès que possible'}`)+(v('#oNote')?`\nRemarque : ${v('#oNote')}`:'');
  const s=$('#send');s.href='https://wa.me/'+WA+'?text='+encodeURIComponent(msg);s.setAttribute('aria-disabled',!ks.length);s.textContent=liv?'Commander en livraison sur WhatsApp':'Commander à emporter sur WhatsApp';
 }
 $('#rows').onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.k;cart[k]=(cart[k]||0)+ +b.dataset.d;if(cart[k]<=0)delete cart[k];render()};
