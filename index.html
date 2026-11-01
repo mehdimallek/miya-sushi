@@ -175,6 +175,41 @@ body.open .fbar,body.info .fbar{display:none}
 @media(max-width:900px){.cats,.split,.restos{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 @media(max-width:420px){.logo img{width:28px;height:28px}.logo{font-size:13px;letter-spacing:.18em;gap:9px;white-space:nowrap}.logo img{width:34px;height:34px;border-radius:50%;flex:none}.logo i{width:26px;height:26px}.cartbtn{white-space:nowrap;gap:7px;padding:7px 8px 7px 12px;font-size:12px}}
+
+/* ---- menu v2 ---- */
+.fbar[hidden]{display:none!important}
+.ppl{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 26px;font-size:13px;color:var(--mut)}
+.ppl span{margin-right:4px}
+.ppl button{border:1px solid var(--line);border-radius:999px;padding:8px 16px;font:600 13px var(--sans);transition:all .2s}
+.ppl button.on{background:var(--txt);color:var(--bg);border-color:var(--txt)}
+.grp{scroll-margin-top:140px;margin-top:34px}.grp>h3{font:600 26px var(--serif);text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.grp>p.gs{color:var(--mut);font-size:14px;margin-bottom:16px}
+.boxes{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.bx{display:grid;grid-template-columns:150px 1fr;gap:18px;background:var(--bg2);border:1px solid var(--line);border-radius:20px;padding:16px;scroll-margin-top:140px}
+.bx .ph{border-radius:14px;overflow:hidden;aspect-ratio:1}.bx .ph img{width:100%;height:100%;object-fit:cover}
+.bx h4{font:600 22px var(--serif);text-transform:uppercase;letter-spacing:.01em}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}.tags i{font-style:normal;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:rgba(244,198,78,.12);color:var(--gold)}
+.sz{display:flex;gap:6px;flex-wrap:wrap}
+.sz button{position:relative;flex:1 1 0;min-width:58px;border:1px solid var(--line);border-radius:12px;padding:8px 6px;text-align:center;transition:all .2s}
+.sz button b{display:block;font:600 14px var(--sans)}.sz button small{display:block;font-size:11px;color:var(--mut)}
+.sz button.on{border-color:var(--acc);background:rgba(227,20,27,.12)}
+.sz button em{position:absolute;top:-7px;right:-5px;font-style:normal;min-width:18px;height:18px;border-radius:9px;background:var(--acc);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;padding:0 4px}
+.bx .det{color:var(--mut);font-size:13px;line-height:1.45;margin:10px 0 2px;min-height:38px}
+.bx .who{font-size:12px;color:var(--txt);opacity:.75}
+.bx .act{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
+.bx .pr{font:600 24px var(--serif);color:var(--gold)}
+.ctl.big:not(.on) .mi-add{width:auto;height:42px;padding:0 18px;border-radius:999px;background:var(--acc);border-color:var(--acc);color:#fff;font:600 13px var(--sans)}
+.ctl.big:not(.on) .mi-add:before{content:"Ajouter "}
+.ctl.big.on button{width:36px;height:36px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cd{background:var(--bg2);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.cd .ph{aspect-ratio:4/3;overflow:hidden}.cd .ph img{width:100%;height:100%;object-fit:cover}
+.cd .in{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.cd b.n{font-weight:600;font-size:15px}.cd small{color:var(--mut);font-size:12.5px;line-height:1.4;flex:1}
+.cd .act{display:flex;justify-content:space-between;align-items:center;margin-top:8px}.cd .pr{font:600 18px var(--serif);color:var(--gold)}
+.bx.dim{opacity:.45}
+@media(max-width:900px){.boxes{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.bx{grid-template-columns:96px 1fr;gap:12px;padding:12px}.bx h4{font-size:19px}.sz button{min-width:0;padding:7px 2px}.sz button b{font-size:13px}.cards{gap:10px}.cd .in{padding:10px}.cd b.n{font-size:14px}}
 </style>
 </head>
 <body>
@@ -213,9 +248,10 @@ body.open .fbar,body.info .fbar{display:none}
 </main>
 <section class="sec" id="carte">
  <p class="eyebrow">La carte</p>
- <h2 class="h2">Boxes, burgers et nouveautés</h2>
- <div class="mtabs" id="mtabs" role="navigation" aria-label="Catégories"><a class="mt" href="#c0">Crunchy Box</a><a class="mt" href="#c1">Cuite Box</a><a class="mt" href="#c2">Crue Box</a><a class="mt" href="#c3">Signature</a><a class="mt" href="#c4">Sushi Crispy Burger</a><a class="mt" href="#c5">Nouveautés</a></div>
- <div class="mgrid"><div class="mcat" id="c0"><h3>Crunchy Box</h3><div class="mi"><img src="media/my_crunchy_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Small · 12 pcs</b><small>Cheese wave saumon, crevette, crabe</small></div><span>30 DT</span><div class="ctl" data-k="x00" data-n="Ajouter Small · 12 pcs"></div></div><div class="mi"><img src="media/m10.webp" alt="" loading="lazy" width="56" height="56"><div><b>Medium · 20 pcs</b><small>Maki spicy crevette, maki saumon cheese, cheese wave crevette, saumon, poulet</small></div><span>44 DT</span><div class="ctl" data-k="x01" data-n="Ajouter Medium · 20 pcs"></div></div><div class="mi"><img src="media/m01.webp" alt="" loading="lazy" width="56" height="56"><div><b>Large · 36 pcs</b><small>Futomaki yugo et volcano, cheese wave ×4, makis cheese et spicy</small></div><span>75 DT</span><div class="ctl" data-k="x02" data-n="Ajouter Large · 36 pcs"></div></div></div><div class="mcat" id="c1"><h3>Cuite Box</h3><div class="mi"><img src="media/m12.webp" alt="" loading="lazy" width="56" height="56"><div><b>Small · 12 pcs</b><small>California ebi tempura, cheese wave crabe, maki saumon fumé cheese</small></div><span>28 DT</span><div class="ctl" data-k="x10" data-n="Ajouter Small · 12 pcs"></div></div><div class="mi"><img src="media/m13.webp" alt="" loading="lazy" width="56" height="56"><div><b>Medium · 24 pcs</b><small>Crunchy maki spicy saumon, california smoke cheese, fusion roll lava</small></div><span>55 DT</span><div class="ctl" data-k="x11" data-n="Ajouter Medium · 24 pcs"></div></div><div class="mi"><img src="media/m02.webp" alt="" loading="lazy" width="56" height="56"><div><b>Large · 48 pcs</b><small>Fusion roll tokyo, california ebi tempura et saumon spicy, cheese wave crabe…</small></div><span>90 DT</span><div class="ctl" data-k="x12" data-n="Ajouter Large · 48 pcs"></div></div><div class="mi"><img src="media/my_xl_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>XLarge · 76 pcs</b><small>Fusion rolls avocado et perles, california chicken, futomakis, crunchy makis…</small></div><span>145 DT</span><div class="ctl" data-k="x13" data-n="Ajouter XLarge · 76 pcs"></div></div></div><div class="mcat" id="c2"><h3>Crue Box</h3><div class="mi"><img src="media/m00.webp" alt="" loading="lazy" width="56" height="56"><div><b>Small · 12 pcs</b><small>California classic, maki saumon, nigiri saumon, gunkan masago</small></div><span>35 DT</span><div class="ctl" data-k="x20" data-n="Ajouter Small · 12 pcs"></div></div><div class="mi"><img src="media/m20.webp" alt="" loading="lazy" width="56" height="56"><div><b>Medium · 24 pcs</b><small>California classic, fusion roll fire wave, maki saumon avocat</small></div><span>55 DT</span><div class="ctl" data-k="x21" data-n="Ajouter Medium · 24 pcs"></div></div><div class="mi"><img src="media/m22.webp" alt="" loading="lazy" width="56" height="56"><div><b>Large · 37 pcs</b><small>California classic, fusion roll green salmon…</small></div><span>92 DT</span><div class="ctl" data-k="x22" data-n="Ajouter Large · 37 pcs"></div></div></div><div class="mcat" id="c3"><h3>Signature</h3><div class="mi"><img src="media/m21.webp" alt="" loading="lazy" width="56" height="56"><div><b>Signature Box · 20 pcs</b><small>Volcano surf, fire wave, avocado, perles, lava</small></div><span>65 DT</span><div class="ctl" data-k="x30" data-n="Ajouter Signature Box · 20 pcs"></div></div></div><div class="mcat" id="c4"><h3>Sushi Crispy Burger</h3><div class="mi"><img src="media/my_burger_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Chicken Burger</b><small>Poulet dynamite, avocat, concombre, fromage blanc et fondant</small></div><span>24 DT</span><div class="ctl" data-k="x40" data-n="Ajouter Chicken Burger"></div></div><div class="mi"><img src="media/my_burger_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Crabe Burger</b><small>Crabe, avocat, concombre, fromage blanc et fondant</small></div><span>24 DT</span><div class="ctl" data-k="x41" data-n="Ajouter Crabe Burger"></div></div><div class="mi"><img src="media/my_burger_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Shrimp Burger</b><small>Crevette, avocat, concombre, fromages</small></div><span>26 DT</span><div class="ctl" data-k="x42" data-n="Ajouter Shrimp Burger"></div></div><div class="mi"><img src="media/my_burger_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Salmon Burger</b><small>Saumon, avocat, concombre, fromages</small></div><span>26 DT</span><div class="ctl" data-k="x43" data-n="Ajouter Salmon Burger"></div></div><div class="mi"><img src="media/my_burger_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Crazy Burger</b><small>Crevette, saumon, crabe, avocat, concombre, fromages</small></div><span>28 DT</span><div class="ctl" data-k="x44" data-n="Ajouter Crazy Burger"></div></div></div><div class="mcat" id="c5"><h3>Nouveautés</h3><div class="mi"><img src="media/my_burrito_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Sushi Burrito</b><small>Saumon, crevettes, légumes frais et sauces · prix en boutique</small></div><span>Nouveau</span><div class="ctl" data-k="x50" data-n="Ajouter Sushi Burrito"></div></div><div class="mi"><img src="media/m41.webp" alt="" loading="lazy" width="56" height="56"><div><b>Menu enfant · 11 pcs</b><small>Maki crevette, maki poulet tempura, poulet panko</small></div><span>20 DT</span><div class="ctl" data-k="x51" data-n="Ajouter Menu enfant · 11 pcs"></div></div><div class="mi"><img src="media/my_gyoza_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Gyoza</b><small>Saveurs japonaises, sauce pimentée douce</small></div><span>Nouveau</span><div class="ctl" data-k="x52" data-n="Ajouter Gyoza"></div></div><div class="mi"><img src="media/my_takoyaki_t.webp" alt="" loading="lazy" width="56" height="56"><div><b>Takoyaki</b><small>Nouveau sur la carte</small></div><span>Nouveau</span><div class="ctl" data-k="x53" data-n="Ajouter Takoyaki"></div></div></div></div>
+ <h2 class="h2">Choisissez votre box</h2>
+ <div class="mtabs" id="mtabs" role="navigation" aria-label="Catégories"><a class="mt" href="#g0">Boxes</a><a class="mt" href="#g3">Signature</a><a class="mt" href="#c4">Burgers</a><a class="mt" href="#c5">Nouveautés</a></div>
+ <div class="ppl" role="group" aria-label="Pour combien de personnes ?"><span>Vous êtes combien ?</span><button data-p="1">1</button><button data-p="2">2</button><button data-p="3">3–4</button><button data-p="5">5 +</button></div>
+ <div id="menu2"></div>
 </section>
 <section class="sec" id="best">
  <p class="eyebrow">Les préférés des clients</p>
@@ -346,6 +382,37 @@ const shut=()=>document.body.classList.remove('open','info');
 function info(){const d=D[cur],x=X[d.k];$('#si').src=`media/${d.k}.webp`;$('#sn').textContent=d.n;$('#sj').textContent=d.ar;$('#sd').textContent=d.d;
  $('#sdl').innerHTML=`<dt>Portion</dt><dd>${x[0]}</dd><dt>Composition</dt><dd>${x[1]}</dd><dt>Allergènes</dt><dd>${x[2]}</dd><dt>Piquant</dt><dd>${x[3]}</dd><dt>Sauce conseillée</dt><dd>${x[4]}</dd>`;
  $('#st').innerHTML=`<span>${d.cat}</span><span>${d.p?d.p+' DT':'Nouveau'}</span><span>Préparé à la minute</span>`;document.body.classList.add('info')}
+
+// ---- menu v2 ----
+(function(){
+const BOX=[
+ {id:'c0',n:'Crunchy Box',img:'my_crunchy',tags:['Croustillant','Fromage fondant'],v:[['x00','S',12,30,'Cheese wave saumon, crevette, crabe'],['x01','M',20,44,'Maki spicy crevette, maki saumon cheese, cheese wave crevette, saumon, poulet'],['x02','L',36,75,'Futomaki yugo et volcano, cheese wave ×4, makis cheese et spicy']]},
+ {id:'c1',n:'Cuite Box',img:'my_xl',tags:['100 % cuit','Idéal pour débuter'],v:[['x10','S',12,28,'California ebi tempura, cheese wave crabe, maki saumon fumé cheese'],['x11','M',24,55,'Crunchy maki spicy saumon, california smoke cheese, fusion roll lava'],['x12','L',48,90,'Fusion roll tokyo, california ebi tempura et saumon spicy, cheese wave crabe, maki avocat cheese'],['x13','XL',76,145,'Fusion rolls avocado et perles, california chicken et saumon spicy, futomakis, crunchy makis']]},
+ {id:'c2',n:'Crue Box',img:'nigiri',tags:['Poisson cru','Frais'],v:[['x20','S',12,35,'California classic, maki saumon, nigiri saumon, gunkan masago'],['x21','M',24,55,'California classic, fusion roll fire wave, maki saumon avocat'],['x22','L',37,92,'California classic, fusion roll green salmon, et plus']]}];
+const SIG={id:'c3',n:'Signature Box',img:'salmon',tags:['Best-seller','Fusion'],v:[['x30','20 pcs',20,65,'Volcano surf, fire wave, avocado, perles, lava']]};
+const BURG=[['x40','Chicken Burger',24,'Poulet dynamite, avocat, concombre, fromages'],['x41','Crabe Burger',24,'Crabe, avocat, concombre, fromages'],['x42','Shrimp Burger',26,'Crevette, avocat, concombre, fromages'],['x43','Salmon Burger',26,'Saumon, avocat, concombre, fromages'],['x44','Crazy Burger',28,'Crevette, saumon, crabe, avocat, fromages']];
+const NEW=[['x50','Sushi Burrito',0,'Saumon, crevettes, légumes frais et sauces','my_burrito_t'],['x52','Gyoza',0,'Saveurs japonaises, sauce pimentée douce','my_gyoza_t'],['x53','Takoyaki',0,'Nouveau sur la carte','my_takoyaki_t'],['x51','Menu enfant · 11 pcs',20,'Maki crevette, maki poulet tempura, poulet panko','m41']];
+const who=p=>p<=12?'Idéal pour 1 personne':p<=24?'Idéal pour 2 personnes':p<=48?'Idéal pour 3–4 personnes':'Idéal pour 5 personnes et +';
+const pr=p=>p?p+' DT':'Nouveau';
+const box=(b,sel)=>`<article class="bx" id="${b.id}" data-b="${b.id}"><div class="ph"><img src="media/${b.img}.webp" alt="${b.n}" loading="lazy"></div><div><h4>${b.n}</h4><div class="tags">${b.tags.map(x=>`<i>${x}</i>`).join('')}</div>${b.v.length>1?`<div class="sz" role="radiogroup" aria-label="Taille">${b.v.map((v,i)=>`<button type="button" role="radio" data-i="${i}"><b>${v[1]}</b><small>${v[2]} pcs</small></button>`).join('')}</div>`:''}<p class="det"></p><p class="who"></p><div class="act"><span class="pr"></span><div class="ctl big" data-k="" data-n=""></div></div></div></article>`;
+const card=(k,n,p,d,img)=>`<article class="cd"><div class="ph"><img src="media/${img}.webp" alt="${n}" loading="lazy"></div><div class="in"><b class="n">${n}</b><small>${d}</small><div class="act"><span class="pr">${pr(p)}</span><div class="ctl" data-k="${k}" data-n="Ajouter ${n}"></div></div></div></article>`;
+const M=document.getElementById('menu2');
+M.innerHTML=`<div class="grp mcat" id="g0"><h3>Boxes</h3><p class="gs">Choisissez votre box, puis la taille.</p><div class="boxes">${BOX.map(b=>box(b)).join('')}</div></div>
+<div class="grp mcat" id="g3"><h3>Signature</h3><div class="boxes">${box(SIG)}</div></div>
+<div class="grp mcat" id="c4"><h3>Sushi Crispy Burger</h3><p class="gs">Le sushi en version burger croustillant.</p><div class="cards">${BURG.map(x=>card(x[0],x[1],x[2],x[3],'my_burger_t')).join('')}</div></div>
+<div class="grp mcat" id="c5"><h3>Nouveautés</h3><div class="cards">${NEW.map(x=>card(x[0],x[1],x[2],x[3],x[4])).join('')}</div></div>`;
+const ALL=[...BOX,SIG],S={};
+function pick(b,i){S[b.id]=i;const el=document.getElementById(b.id),v=b.v[i];
+ el.querySelectorAll('.sz button').forEach((x,j)=>{x.classList.toggle('on',j===i);x.setAttribute('aria-checked',j===i)});
+ el.querySelector('.det').textContent=v[4];el.querySelector('.who').textContent=b.v.length>1?who(v[2]):'20 pièces signature';
+ el.querySelector('.pr').textContent=v[3]+' DT';const c=el.querySelector('.ctl');c.dataset.k=v[0];c.dataset.n=`Ajouter ${b.n} ${v[1]}`;c.dataset.h='';render()}
+function badges(){ALL.forEach(b=>{const el=document.getElementById(b.id);el.querySelectorAll('.sz button').forEach((x,j)=>{const q=cart[b.v[j][0]]||0;let e=x.querySelector('em');if(q&&!e){e=document.createElement('em');x.appendChild(e)}if(e){if(q)e.textContent=q;else e.remove()}})})}
+ALL.forEach(b=>{pick(b,0);document.getElementById(b.id).addEventListener('click',e=>{const s=e.target.closest('.sz button');if(s)pick(b,+s.dataset.i)})});
+const r0=render;render=function(){r0();badges()};render();
+document.querySelectorAll('.ppl button').forEach(btn=>btn.onclick=()=>{const p=+btn.dataset.p,on=!btn.classList.contains('on');document.querySelectorAll('.ppl button').forEach(x=>x.classList.toggle('on',on&&x===btn));
+ BOX.forEach(b=>{let best=0,d=1e9;const target=p===1?12:p===2?22:p===3?40:76;b.v.forEach((v,i)=>{const dd=Math.abs(v[2]-target);if(dd<d){d=dd;best=i}});if(on)pick(b,best);else pick(b,0)});
+ const sig=document.getElementById('c3');sig&&sig.classList.toggle('dim',on&&p>=3);});
+})();
 $('#more').onclick=info;
 document.addEventListener('click',e=>{const b=e.target.closest('.ctl button');if(!b)return;const k=b.closest('.ctl').dataset.k;cart[k]=(cart[k]||0)+ +b.dataset.d;if(cart[k]<=0)delete cart[k];render();if(+b.dataset.d>0){const c=$('#cartBtn');c.classList.remove('bump');void c.offsetWidth;c.classList.add('bump')}});
 document.addEventListener('click',e=>{const r=e.target.closest('.mi');if(!r||e.target.closest('.ctl'))return;const c=r.querySelector('.ctl');if(c&&!cart[c.dataset.k])c.querySelector('button').click()});
@@ -369,7 +436,7 @@ gsap.registerPlugin(ScrollTrigger);
 $$('.rv').forEach(e=>{e.classList.remove('rv')});
 let lenis;
 if(window.Lenis){lenis=new Lenis({lerp:.09,smoothWheel:true});lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);
- $$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const h=a.getAttribute('href');const el=h==='#top'?document.body:document.querySelector(h);if(el){e.preventDefault();lenis.scrollTo(h==='#top'?0:el,{offset:/^#c\d/.test(h)?-150:-70,duration:1.4})}}));
+ $$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const h=a.getAttribute('href');const el=h==='#top'?document.body:document.querySelector(h);if(el){e.preventDefault();lenis.scrollTo(h==='#top'?0:el,{offset:/^#[cg]\d/.test(h)?-150:-70,duration:1.4})}}));
  document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{go(+b.dataset.go);lenis.scrollTo(0,{duration:1.4})});}
 // headings: words rise
 $$('.h2').forEach(h=>{h.innerHTML=h.textContent.split(' ').map(w=>`<span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em"><span class="w" style="display:inline-block">${w}</span></span>`).join(' ');
